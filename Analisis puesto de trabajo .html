@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Puesto de Trabajo - Multiservices LIMCON LTDA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #E6F3E6; /* Verde claro */
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #F0F8FF; /* Azul claro */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 150px;
+        }
+        h1, h2, h3 {
+            color: #1A3C34; /* Verde oscuro */
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #1A3C34; /* Verde oscuro */
+        }
+        select, input[type="text"], input[type="date"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #90CAF9; /* Borde azul claro */
+            border-radius: 4px;
+            background-color: #FFFFFF;
+        }
+        .result {
+            background: #E3F2FD; /* Azul claro */
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #90CAF9; /* Borde azul claro */
+            display: none;
+        }
+        .result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .result li {
+            margin-bottom: 8px;
+        }
+        button {
+            background: #2E7D32; /* Verde oscuro */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #1565C0; /* Azul oscuro */
+        }
+        .error {
+            color: #D32F2F; /* Rojo oscuro */
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #pdfTempContainer {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #90CAF9;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background: #BBDEFB; /* Azul claro */
+            color: #1A3C34;
+        }
+        .highlight-row {
+            background: #E3F2FD; /* Resaltar fila */
+        }
+        .highlight-col {
+            background: #E3F2FD; /* Resaltar columna */
+        }
+        .highlight-cell {
+            background: #FFF3E0;
+            border: 2px solid #D81B60;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo de la empresa -->
+        <div class="logo">
+            <img src="https://static.wixstatic.com/media/285ff7_fab86622216c417f8241b33d5cb381f2~mv2.jpeg/v1/crop/x_0,y_159,w_1380,h_413/fill/w_433,h_130,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202025-05-30%20at%205_27_07%20PM%20(1).jpeg" alt="Logo Multiservicios LIMCON LTDA">
+        </div>
+
+        <!-- Datos de la empresa -->
+        <div class="section">
+            <h2>Datos de la Empresa</h2>
+            <label>Nombre:</label><input type="text" value="Multiservices LIMCON LTDA" readonly><br>
+            <label>Dirección:</label><input type="text" value="CL 34 SUR 39-60"><br>
+            <label>NIT:</label><input type="text" value="901326942-1">
+        </div>
+
+        <!-- Datos del trabajador -->
+        <div class="section">
+            <h2>Datos del Trabajador</h2>
+            <label>Nombre:</label><input type="text" id="nombreTrabajador" value="MAGDALENA CASTRO TRIANA"><br>
+            <label>Cargo:</label><input type="text" value="Operario de limpieza" readonly><br>
+            <label>Tarea:</label><input type="text" value="Barrido y trapeado" readonly><br>
+            <label>Fecha del análisis:</label><input type="date" id="fechaAnalisis" value="2025-05-27"><br>
+            <label>Lugar:</label><input type="text" id="lugar" placeholder="Pinar de la sierra"><br>
+            <label>Edad:</label><input type="number" id="edad" min="18" max="80" placeholder="56">
+        </div>
+
+        <!-- Evaluación Grupo A -->
+        <div class="section">
+            <h2>Evaluación Grupo A (Tronco, Cuello, Piernas)</h2>
+            <h3>Tronco</h3>
+            <label>Puntuación Base:</label>
+            <select id="troncoBase">
+                <option value="1">0° (1)</option>
+                <option value="2">>0° y <20° (2)</option>
+                <option value="3" selected>20°-60° (3)</option>
+                <option value="4">>60° (4)</option>
+            </select><br>
+            <label>Ajuste (inclinación lateral/rotación):</label>
+            <select id="troncoAjuste">
+                <option value="0">No (0)</option>
+                <option value="1" selected>Sí (+1)</option>
+            </select>
+
+            <h3>Cuello</h3>
+            <label>Puntuación Base:</label>
+            <select id="cuelloBase">
+                <option value="1">0° (1)</option>
+                <option value="2" selected>>0° y <20° (2)</option>
+                <option value="3">>20° (3)</option>
+            </select><br>
+            <label>Ajuste (rotación/inclinación lateral):</label>
+            <select id="cuelloAjuste">
+                <option value="0">No (0)</option>
+                <option value="1" selected>Sí (+1)</option>
+            </select>
+
+            <h3>Piernas</h3>
+            <label>Puntuación Base:</label>
+            <select id="piernasBase">
+                <option value="2" selected>Inestable o sentado (2)</option>
+                <option value="1">Estable (1)</option>
+            </select><br>
+            <label>Ajuste (flexión rodillas 30°-60°):</label>
+            <select id="piernasAjuste">
+                <option value="0">No (0)</option>
+                <option value="1" selected>Sí (+1)</option>
+            </select>
+        </div>
+
+        <!-- Evaluación Grupo B -->
+        <div class="section">
+            <h2>Evaluación Grupo B (Brazo, Antebrazo, Muñeca)</h2>
+            <h3>Brazo</h3>
+            <label>Puntuación Base:</label>
+            <select id="brazoBase">
+                <option value="1">0°-20° (1)</option>
+                <option value="2" selected>>20° y ≤45° (2)</option>
+                <option value="3">>45° (3)</option>
+            </select><br>
+            <label>Ajuste (extensión/flexión >20° y ≤45°):</label>
+            <select id="brazoAjuste1">
+                <option value="0">No (0)</option>
+                <option value="2" selected>Sí (+2)</option>
+            </select><br>
+            <label>Ajuste (punto de apoyo/gravedad):</label>
+            <select id="brazoAjuste2">
+                <option value="0">No (0)</option>
+                <option value="-1" selected>Sí (-1)</option>
+            </select>
+
+            <h3>Antebrazo</h3>
+            <label>Puntuación:</label>
+            <select id="antebrazo">
+                <option value="1" selected>60°-100° (1)</option>
+                <option value="2">>100° o <60° (2)</option>
+            </select>
+
+            <h3>Muñeca</h3>
+            <label>Puntuación Base:</label>
+            <select id="munecaBase">
+                <option value="1" selected>>0° y <15° (1)</option>
+                <option value="2">≥15° (2)</option>
+            </select><br>
+            <label>Ajuste (torsión/desviación radial/cubital):</label>
+            <select id="munecaAjuste">
+                <option value="0">No (0)</option>
+                <option value="1" selected>Sí (+1)</option>
+            </select>
+        </div>
+
+        <!-- Carga y Acoplamiento -->
+        <div class="section">
+            <h2>Carga y Acoplamiento</h2>
+            <label>Carga:</label>
+            <select id="carga">
+                <option value="0" selected><5 kg (0)</option>
+                <option value="1">5-10 kg (1)</option>
+                <option value="2">>10 kg o manipulación brusca (2)</option>
+            </select><br>
+            <label>Acoplamiento:</label>
+            <select id="acoplamiento">
+                <option value="0">Bueno (0)</option>
+                <option value="1" selected>Aceptable (1)</option>
+                <option value="2">Pobre (2)</option>
+            </select>
+        </div>
+
+        <!-- Actividad -->
+        <div class="section">
+            <h2>Actividad</h2>
+            <label>Ajuste por movimientos repetitivos:</label>
+            <select id="actividad">
+                <option value="0">No (0)</option>
+                <option value="1" selected>Sí (+1)</option>
+            </select>
+        </div>
+
+        <!-- Botones -->
+        <div class="section">
+            <button onclick="calcularREBA()">Calcular Puntuación REBA</button>
+            <button onclick="reiniciarValores()">Reiniciar</button>
+            <button onclick="exportarPDF()">Exportar a PDF</button>
+            <button onclick="exportarCSV()">Exportar a CSV</button>
+            <div id="error" class="error"></div>
+        </div>
+
+        <!-- Resultado -->
+        <div class="section result" id="resultado">
+            <h2>Resultado del Análisis</h2>
+            <h3>Puntuaciones Detalladas</h3>
+            <ul>
+                <li><strong>Tronco:</strong> <span id="puntuacionTronco"></span></li>
+                <li><strong>Cuello:</strong> <span id="puntuacionCuello"></span></li>
+                <li><strong>Piernas:</strong> <span id="puntuacionPiernas"></span></li>
+                <li><strong>Puntuación Grupo A:</strong> <span id="puntuacionA"></span></li>
+                <li><strong>Brazo:</strong> <span id="puntuacionBrazo"></span></li>
+                <li><strong>Antebrazo:</strong> <span id="puntuacionAntebrazo"></span></li>
+                <li><strong>Muñeca:</strong> <span id="puntuacionMuneca"></span></li>
+                <li><strong>Puntuación Grupo B:</strong> <span id="puntuacionB"></span></li>
+                <li><strong>Puntuación Tabla C:</strong> <span id="puntuacionC"></span></li>
+                <li><strong>Puntuación Actividad:</strong> <span id="puntuacionActividad"></span></li>
+                <li><strong>Puntuación Final REBA:</strong> <span id="puntuacionFinal"></span></li>
+                <li><strong>Nivel de Riesgo:</strong> <span id="nivelRiesgo"></span></li>
+            </ul>
+            <h3>Tablas de Cruce</h3>
+            <div class="table-container" id="tablaAContainer"></div>
+            <div class="table-container" id="tablaBContainer"></div>
+            <div class="table-container" id="tablaCContainer"></div>
+            <h3>Conclusiones y Recomendaciones</h3>
+            <p id="conclusiones"></p>
+        </div>
+    </div>
+    <div id="pdfTempContainer"></div>
+
+    <script>
+        function validarCampos() {
+            const fecha = document.getElementById('fechaAnalisis').value;
+            const lugar = document.getElementById('lugar').value.trim();
+            const edad = document.getElementById('edad').value;
+            const today = new Date('2025-06-08');
+            const inputDate = new Date(fecha);
+            let errorMsg = '';
+
+            if (!fecha) {
+                errorMsg += 'La fecha del análisis es obligatoria.<br>';
+            } else if (inputDate > today) {
+                errorMsg += 'La fecha no puede ser posterior a hoy.<br>';
+            }
+
+            if (!lugar || lugar.length < 3) {
+                errorMsg += 'El lugar debe tener al menos 3 caracteres.<br>';
+            }
+
+            if (!edad || edad < 18 || edad > 80) {
+                errorMsg += 'La edad debe estar entre 18 y 80 años.<br>';
+            }
+
+            const inputs = document.querySelectorAll('select');
+            let selectValid = true;
+            inputs.forEach(input => {
+                if (!input.value) selectValid = false;
+            });
+            if (!selectValid) {
+                errorMsg += 'Por favor, complete todas las selecciones.<br>';
+            }
+
+            if (errorMsg) {
+                document.getElementById('error').innerHTML = errorMsg;
+                document.getElementById('resultado').style.display = 'none';
+                return false;
+            } else {
+                document.getElementById('error').textContent = '';
+                return true;
+            }
+        }
+
+        function generarTablaA(tronco, cuello, piernas, puntuacionA) {
+            const tablaA = [
+                [1, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7],
+                [2, 2, 2, 3, 4, 4, 5, 6, 6, 7, 7, 8],
+                [3, 3, 3, 3, 4, 5, 6, 7, 7, 8, 8, 8],
+                [4, 4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9],
+                [5, 5, 5, 5, 6, 7, 8, 8, 9, 9, 10, 10],
+                [6, 6, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11]
+            ];
+            const colIndex = (cuello - 1) * 3 + (piernas - 1);
+            const rowIndex = Math.min(tronco - 1, 5);
+
+            let html = '<h4>Tabla A: Grupo A (Tronco vs. Cuello/Piernas)</h4>';
+            html += '<table><tr><th>Tronco</th>';
+            for (let c = 1; c <= 3; c++) {
+                for (let p = 1; p <= 4; p++) {
+                    html += `<th${colIndex === (c - 1) * 3 + (p - 1) ? ' class="highlight-col"' : ''}>Cuello ${c}, Piernas ${p}</th>`;
+                }
+            }
+            html += '</tr>';
+            tablaA.forEach((row, i) => {
+                html += `<tr${i === rowIndex ? ' class="highlight-row"' : ''}>`;
+                html += `<th>Tronco ${i + 1}</th>`;
+                row.forEach((cell, j) => {
+                    const isHighlighted = i === rowIndex && j === colIndex;
+                    html += `<td${isHighlighted ? ' class="highlight-cell"' : ''}>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+            return html;
+        }
+
+        function generarTablaB(brazo, antebrazo, muneca, puntuacionB) {
+            const tablaB = [
+                [1, 2, 2, 3, 4, 4],
+                [2, 3, 3, 4, 5, 5],
+                [3, 4, 4, 5, 6, 6],
+                [4, 5, 5, 6, 7, 7],
+                [5, 6, 6, 7, 8, 8]
+            ];
+            const colIndex = (antebrazo - 1) * 3 + (muneca - 1);
+            const rowIndex = Math.min(brazo - 1, 4);
+
+            let html = '<h4>Tabla B: Grupo B (Brazo vs. Antebrazo/Muñeca)</h4>';
+            html += '<table><tr><th>Brazo</th>';
+            for (let a = 1; a <= 2; a++) {
+                for (let m = 1; m <= 3; m++) {
+                    html += `<th${colIndex === (a - 1) * 3 + (m - 1) ? ' class="highlight-col"' : ''}>Antebrazo ${a}, Muñeca ${m}</th>`;
+                }
+            }
+            html += '</tr>';
+            tablaB.forEach((row, i) => {
+                html += `<tr${i === rowIndex ? ' class="highlight-row"' : ''}>`;
+                html += `<th>Brazo ${i + 1}</th>`;
+                row.forEach((cell, j) => {
+                    const isHighlighted = i === rowIndex && j === colIndex;
+                    html += `<td${isHighlighted ? ' class="highlight-cell"' : ''}>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+            return html;
+        }
+
+        function generarTablaC(puntuacionA, puntuacionB, puntuacionC) {
+            const tablaC = [
+                [1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7],
+                [1, 2, 2, 3, 4, 4, 5, 6, 7, 8, 8, 8],
+                [2, 3, 3, 3, 4, 5, 6, 7, 8, 8, 8, 8],
+                [3, 4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9],
+                [4, 5, 5, 5, 6, 7, 8, 8, 9, 10, 10, 10],
+                [5, 6, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11],
+                [7, 7, 7, 7, 8, 8, 9, 10, 10, 11, 11, 12]
+            ];
+            const rowIndex = Math.min(puntuacionA - 1, 6);
+            const colIndex = Math.min(puntuacionB - 1, 11);
+
+            let html = '<h4>Tabla C: Combinación Grupo A y Grupo B</h4>';
+            html += '<table><tr><th>Grupo A</th>';
+            for (let b = 1; b <= 12; b++) {
+                html += `<th${colIndex === b - 1 ? ' class="highlight-col"' : ''}>Grupo B ${b}</th>`;
+            }
+            html += '</tr>';
+            tablaC.forEach((row, i) => {
+                html += `<tr${i === rowIndex ? ' class="highlight-row"' : ''}>`;
+                html += `<th>Grupo A ${i + 1}</th>`;
+                row.forEach((cell, j) => {
+                    const isHighlighted = i === rowIndex && j === colIndex;
+                    html += `<td${isHighlighted ? ' class="highlight-cell"' : ''}>${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+            return html;
+        }
+
+        function calcularREBA() {
+            if (!validarCampos()) return false;
+
+            // Grupo A
+            const troncoBase = parseInt(document.getElementById('troncoBase').value);
+            const troncoAjuste = parseInt(document.getElementById('troncoAjuste').value);
+            const tronco = troncoBase + troncoAjuste;
+
+            const cuelloBase = parseInt(document.getElementById('cuelloBase').value);
+            const cuelloAjuste = parseInt(document.getElementById('cuelloAjuste').value);
+            const cuello = cuelloBase + cuelloAjuste;
+
+            const piernasBase = parseInt(document.getElementById('piernasBase').value);
+            const piernasAjuste = parseInt(document.getElementById('piernasAjuste').value);
+            const piernas = piernasBase + piernasAjuste;
+
+            const tablaA = [
+                [1, 1, 1, 2, 3, 3, 4, 5, 5, 6, 7, 7],
+                [2, 2, 2, 3, 4, 4, 5, 6, 6, 7, 7, 8],
+                [3, 3, 3, 3, 4, 5, 6, 7, 7, 8, 8, 8],
+                [4, 4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9],
+                [5, 5, 5, 5, 6, 7, 8, 8, 9, 9, 10, 10],
+                [6, 6, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11]
+            ];
+            const puntuacionA = tablaA[Math.min(tronco - 1, 5)][(cuello - 1) * 3 + (piernas - 1)];
+
+            // Grupo B
+            const brazoBase = parseInt(document.getElementById('brazoBase').value);
+            const brazoAjuste1 = parseInt(document.getElementById('brazoAjuste1').value);
+            const brazoAjuste2 = parseInt(document.getElementById('brazoAjuste2').value);
+            const brazo = brazoBase + brazoAjuste1 + brazoAjuste2;
+
+            const antebrazo = parseInt(document.getElementById('antebrazo').value);
+            const munecaBase = parseInt(document.getElementById('munecaBase').value);
+            const munecaAjuste = parseInt(document.getElementById('munecaAjuste').value);
+            const muneca = munecaBase + munecaAjuste;
+
+            const tablaB = [
+                [1, 2, 2, 3, 4, 4],
+                [2, 3, 3, 4, 5, 5],
+                [3, 4, 4, 5, 6, 6],
+                [4, 5, 5, 6, 7, 7],
+                [5, 6, 6, 7, 8, 8]
+            ];
+            const puntuacionB = tablaB[Math.min(brazo - 1, 4)][(antebrazo - 1) * 3 + (muneca - 1)];
+
+            // Tabla C
+            const tablaC = [
+                [1, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 7],
+                [1, 2, 2, 3, 4, 4, 5, 6, 7, 8, 8, 8],
+                [2, 3, 3, 3, 4, 5, 6, 7, 8, 8, 8, 8],
+                [3, 4, 4, 4, 5, 6, 7, 8, 8, 9, 9, 9],
+                [4, 5, 5, 5, 6, 7, 8, 8, 9, 10, 10, 10],
+                [5, 6, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11],
+                [7, 7, 7, 7, 8, 8, 9, 10, 10, 11, 11, 12]
+            ];
+            const carga = parseInt(document.getElementById('carga').value);
+            const acoplamiento = parseInt(document.getElementById('acoplamiento').value);
+            const puntuacionC = tablaC[Math.min(puntuacionA - 1, 6)][Math.min(puntuacionB - 1, 11)] + carga + acoplamiento;
+
+            // Actividad
+            const actividad = parseInt(document.getElementById('actividad').value);
+            const puntuacionFinal = puntuacionC + actividad;
+
+            // Nivel de riesgo
+            let nivelRiesgo = '';
+            if (puntuacionFinal <= 3) nivelRiesgo = 'Bajo (No requiere acción)';
+            else if (puntuacionFinal <= 7) nivelRiesgo = 'Medio (Investigar y realizar cambios en el corto plazo)';
+            else if (puntuacionFinal <= 10) nivelRiesgo = 'Alto (Acción inmediata)';
+            else nivelRiesgo = 'Muy Alto (Acción urgente)';
+
+            // Conclusiones
+            const conclusiones = `
+                El análisis REBA para las tareas de barrido y trapeado en Multiservices LIMCON LTDA indica un nivel de riesgo ${nivelRiesgo.toLowerCase()}. Se recomienda:
+                <ul>
+                    <li>Usar herramientas ergonómicas (escobas/trapeadores con mangos ajustables).</li>
+                    <li>Capacitar en técnicas de trabajo (mantener tronco recto, usar cadera).</li>
+                    <li>Implementar pausas activas cada 30-40 minutos con estiramientos.</li>
+                    <li>Rediseñar el entorno para superficies despejadas.</li>
+                    <li>Rotar tareas para reducir movimientos repetitivos.</li>
+                </ul>
+            `;
+            const conclusionesTexto = `El análisis REBA indica un nivel de riesgo ${nivelRiesgo.toLowerCase()}. Recomendaciones: Usar herramientas ergonómicas, capacitar en técnicas de trabajo, implementar pausas activas, rediseñar el entorno, rotar tareas.`;
+
+            // Mostrar resultados
+            document.getElementById('puntuacionTronco').textContent = `${tronco} (Base: ${troncoBase}, Ajuste: ${troncoAjuste})`;
+            document.getElementById('puntuacionCuello').textContent = `${cuello} (Base: ${cuelloBase}, Ajuste: ${cuelloAjuste})`;
+            document.getElementById('puntuacionPiernas').textContent = `${piernas} (Base: ${piernasBase}, Ajuste: ${piernasAjuste})`;
+            document.getElementById('puntuacionA').textContent = puntuacionA;
+            document.getElementById('puntuacionBrazo').textContent = `${brazo} (Base: ${brazoBase}, Ajuste Ext/Flex: ${brazoAjuste1}, Ajuste Apoyo: ${brazoAjuste2})`;
+            document.getElementById('puntuacionAntebrazo').textContent = `${antebrazo} (Sin ajuste)`;
+            document.getElementById('puntuacionMuneca').textContent = `${muneca} (Base: ${munecaBase}, Ajuste: ${munecaAjuste})`;
+            document.getElementById('puntuacionB').textContent = puntuacionB;
+            document.getElementById('puntuacionC').textContent = `${puntuacionC} (Grupo A: ${puntuacionA}, Grupo B: ${puntuacionB}, Carga: ${carga}, Acoplamiento: ${acoplamiento})`;
+            document.getElementById('puntuacionActividad').textContent = actividad;
+            document.getElementById('puntuacionFinal').textContent = puntuacionFinal;
+            document.getElementById('nivelRiesgo').textContent = nivelRiesgo;
+            document.getElementById('conclusiones').innerHTML = conclusiones;
+
+            // Generar tablas visuales
+            document.getElementById('tablaAContainer').innerHTML = generarTablaA(tronco, cuello, piernas, puntuacionA);
+            document.getElementById('tablaBContainer').innerHTML = generarTablaB(brazo, antebrazo, muneca, puntuacionB);
+            document.getElementById('tablaCContainer').innerHTML = generarTablaC(puntuacionA, puntuacionB, puntuacionC);
+
+            document.getElementById('resultado').style.display = 'block';
+            return { tronco, cuello, piernas, puntuacionA, brazo, antebrazo, muneca, puntuacionB, puntuacionC, carga, acoplamiento, actividad, puntuacionFinal, nivelRiesgo, conclusiones, conclusionesTexto };
+        }
+
+        function reiniciarValores() {
+            document.getElementById('troncoBase').value = '3';
+            document.getElementById('troncoAjuste').value = '1';
+            document.getElementById('cuelloBase').value = '2';
+            document.getElementById('cuelloAjuste').value = '1';
+            document.getElementById('piernasBase').value = '2';
+            document.getElementById('piernasAjuste').value = '1';
+            document.getElementById('brazoBase').value = '2';
+            document.getElementById('brazoAjuste1').value = '2';
+            document.getElementById('brazoAjuste2').value = '-1';
+            document.getElementById('antebrazo').value = '1';
+            document.getElementById('munecaBase').value = '1';
+            document.getElementById('munecaAjuste').value = '1';
+            document.getElementById('carga').value = '0';
+            document.getElementById('acoplamiento').value = '1';
+            document.getElementById('actividad').value = '1';
+            document.getElementById('nombreTrabajador').value = 'MAGDALENA CASTRO TRIANA';
+            document.getElementById('fechaAnalisis').value = '2025-05-27';
+            document.getElementById('lugar').value = '';
+            document.getElementById('edad').value = '';
+            document.getElementById('error').textContent = '';
+            document.getElementById('resultado').style.display = 'none';
+        }
+
+        function escapeCSV(value) {
+            if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+                return `"${value.replace(/"/g, '""')}"`;
+            }
+            return value;
+        }
+
+        function exportarPDF() {
+            const resultados = calcularREBA();
+            if (!resultados) return;
+
+            const tempContainer = document.getElementById('pdfTempContainer');
+            const logoUrl = 'https://static.wixstatic.com/media/285ff7_fab86622216c417f8241b33d5cb381f2~mv2.jpeg/v1/crop/x_0,y_159,w_1380,h_413/fill/w_433,h_130,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/WhatsApp%20Image%202025-05-30%20at%205_27_07%20PM%20(1).jpeg';
+
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = logoUrl;
+
+            img.onload = () => {
+                tempContainer.innerHTML = `
+                    <div style="font-family: Arial, sans-serif; margin: 20px; color: #333;">
+                        <div style="text-align: center;">
+                            <img src="${logoUrl}" style="max-width: 150px;">
+                            <h1 style="color: #1A3C34;">Análisis de Puesto de Trabajo - Multiservicios LIMCON LTDA</h1>
+                        </div>
+                        <h2 style="color: #1A3C34;">Datos de la Empresa</h2>
+                        <p><strong>Nombre:</strong> Multiservices LIMCON LTDA</p>
+                        <p><strong>Dirección:</strong> CL 34 SUR 39-60</p>
+                        <p><strong>NIT:</strong> 901326942-1</p>
+                        <h2 style="color: #1A3C34;">Datos del Trabajador</h2>
+                        <p><strong>Nombre:</strong> ${document.getElementById('nombreTrabajador').value}</p>
+                        <p><strong>Cargo:</strong> Operario de limpieza</p>
+                        <p><strong>Tarea:</strong> Barrido y trapeado</p>
+                        <p><strong>Fecha del análisis:</strong> ${document.getElementById('fechaAnalisis').value}</p>
+                        <p><strong>Lugar:</strong> ${document.getElementById('lugar').value}</p>
+                        <p><strong>Edad:</strong> ${document.getElementById('edad').value} años</p>
+                        <h2 style="color: #1A3C34;">Evaluación Grupo A</h2>
+                        <p><strong>Tronco:</strong> ${resultados.tronco} (Base: ${document.getElementById('troncoBase').value}, Ajuste: ${document.getElementById('troncoAjuste').value})</p>
+                        <p><strong>Cuello:</strong> ${resultados.cuello} (Base: ${document.getElementById('cuelloBase').value}, Ajuste: ${document.getElementById('cuelloAjuste').value})</p>
+                        <p><strong>Piernas:</strong> ${resultados.piernas} (Base: ${document.getElementById('piernasBase').value}, Ajuste: ${document.getElementById('piernasAjuste').value})</p>
+                        <p><strong>Puntuación Grupo A:</strong> ${resultados.puntuacionA}</p>
+                        <div style="overflow-x: auto;">${generarTablaA(resultados.tronco, resultados.cuello, resultados.piernas, resultados.puntuacionA)}</div>
+                        <h2 style="color: #1A3C34;">Evaluación Grupo B</h2>
+                        <p><strong>Brazo:</strong> ${resultados.brazo} (Base: ${document.getElementById('brazoBase').value}, Ajuste Ext/Flex: ${document.getElementById('brazoAjuste1').value}, Ajuste Apoyo: ${document.getElementById('brazoAjuste2').value})</p>
+                        <p><strong>Antebrazo:</strong> ${resultados.antebrazo} (Sin ajuste)</p>
+                        <p><strong>Muñeca:</strong> ${resultados.muneca} (Base: ${document.getElementById('munecaBase').value}, Ajuste: ${document.getElementById('munecaAjuste').value})</p>
+                        <p><strong>Puntuación Grupo B:</strong> ${resultados.puntuacionB}</p>
+                        <div style="overflow-x: auto;">${generarTablaB(resultados.brazo, resultados.antebrazo, resultados.muneca, resultados.puntuacionB)}</div>
+                        <h2 style="color: #1A3C34;">Carga y Acoplamiento</h2>
+                        <p><strong>Carga:</strong> ${resultados.carga}</p>
+                        <p><strong>Acoplamiento:</strong> ${resultados.acoplamiento}</p>
+                        <h2 style="color: #1A3C34;">Actividad</h2>
+                        <p><strong>Puntuación Actividad:</strong> ${resultados.actividad}</p>
+                        <h2 style="color: #1A3C34;">Resultados Finales</h2>
+                        <p><strong>Puntuación Tabla C:</strong> ${resultados.puntuacionC} (Grupo A: ${resultados.puntuacionA}, Grupo B: ${resultados.puntuacionB}, Carga: ${resultados.carga}, Acoplamiento: ${resultados.acoplamiento})</p>
+                        <div style="overflow-x: auto;">${generarTablaC(resultados.puntuacionA, resultados.puntuacionB, resultados.puntuacionC)}</div>
+                        <p><strong>Puntuación Final REBA:</strong> ${resultados.puntuacionFinal}</p>
+                        <p><strong>Nivel de Riesgo:</strong> ${resultados.nivelRiesgo}</p>
+                        <h2 style="color: #1A3C34;">Conclusiones y Recomendaciones</h2>
+                        ${resultados.conclusiones}
+                    </div>
+                `;
+
+                const opt = {
+                    margin: 0.5,
+                    filename: 'Analisis_REBA.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                html2pdf().from(tempContainer).set(opt).save().then(() => {
+                    tempContainer.innerHTML = '';
+                }).catch(err => {
+                    console.error('Error al generar el PDF:', err);
+                    alert('Error al generar el PDF. Verifica la consola para más detalles.');
+                });
+            };
+
+            img.onerror = () => {
+                console.error('Error al cargar la imagen del logo.');
+                alert('No se pudo cargar el logo. Intenta de nuevo o verifica la URL.');
+            };
+        }
+
+        function exportarCSV() {
+            const resultados = calcularREBA();
+            if (!resultados) return;
+
+            const data = [
+                ["Campo", "Valor"],
+                ["Datos de la Empresa", ""],
+                ["Nombre Empresa", "Multiservices LIMCON LTDA"],
+                ["Dirección", "CL 34 SUR 39-60"],
+                ["NIT", "901326942-1"],
+                [""],
+                ["Datos del Trabajador", ""],
+                ["Nombre Trabajador", document.getElementById('nombreTrabajador').value],
+                ["Cargo", "Operario de limpieza"],
+                ["Tarea", "Barrido y trapeado"],
+                ["Fecha del análisis", document.getElementById('fechaAnalisis').value],
+                ["Lugar", document.getElementById('lugar').value],
+                ["Edad", document.getElementById('edad').value],
+                [""],
+                ["Evaluación Grupo A", ""],
+                ["Tronco", `${resultados.tronco} (Base: ${document.getElementById('troncoBase').value}, Ajuste: ${document.getElementById('troncoAjuste').value})`],
+                ["Cuello", `${resultados.cuello} (Base: ${document.getElementById('cuelloBase').value}, Ajuste: ${document.getElementById('cuelloAjuste').value})`],
+                ["Piernas", `${resultados.piernas} (Base: ${document.getElementById('piernasBase').value}, Ajuste: ${document.getElementById('piernasAjuste').value})`],
+                ["Puntuación Grupo A", resultados.puntuacionA],
+                [""],
+                ["Evaluación Grupo B", ""],
+                ["Brazo", `${resultados.brazo} (Base: ${document.getElementById('brazoBase').value}, Ajuste Ext/Flex: ${document.getElementById('brazoAjuste1').value}, Ajuste Apoyo: ${document.getElementById('brazoAjuste2').value})`],
+                ["Antebrazo", `${resultados.antebrazo} (Sin ajuste)`],
+                ["Muñeca", `${resultados.muneca} (Base: ${document.getElementById('munecaBase').value}, Ajuste: ${document.getElementById('munecaAjuste').value})`],
+                ["Puntuación Grupo B", resultados.puntuacionB],
+                [""],
+                ["Carga y Acoplamiento", ""],
+                ["Carga", resultados.carga],
+                ["Acoplamiento", resultados.acoplamiento],
+                [""],
+                ["Actividad", ""],
+                ["Puntuación Actividad", resultados.actividad],
+                [""],
+                ["Resultados Finales", ""],
+                ["Puntuación Tabla C", `${resultados.puntuacionC} (Grupo A: ${resultados.puntuacionA}, Grupo B: ${resultados.puntuacionB}, Carga: ${resultados.carga}, Acoplamiento: ${resultados.acoplamiento})`],
+                ["Puntuación Final REBA", resultados.puntuacionFinal],
+                ["Nivel de Riesgo", resultados.nivelRiesgo],
+                ["Conclusiones y Recomendaciones", resultados.conclusionesTexto]
+            ];
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            data.forEach(row => {
+                csvContent += row.map(escapeCSV).join(",") + "\r\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Analisis_REBA.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
